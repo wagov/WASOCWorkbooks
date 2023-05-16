@@ -13,17 +13,17 @@ We use **WASOC - Threat Hunting - Rapid IoC Search.json** as example.
 ## Step-2: Navigate to Azure Sentinel | Workbooks
 
 Navigate to your Microsoft Sentinel console, select **Workbooks** in the side blade, and choose the "_Add workbook_" 
-![image](https://github.com/wagov/WASOCWorkbooks/assets/43643214/6a67c229-4108-40dc-b712-926f98031e3e)
+![image](https://github.com/wagov/WASOCWorkbooks/assets/43643214/ad2ae6ea-22eb-4135-aea6-b6c335c5ea18)
 
 <br>
 
 Once the sample workbook displays, select _Edit_ mode,
-![image](https://github.com/wagov/WASOCWorkbooks/assets/43643214/904e1c5c-673f-4f71-b555-72388eb9d89d)
+![image](https://github.com/wagov/WASOCWorkbooks/assets/43643214/73bbb56c-94a2-4d1d-922a-faed864f247b)
 
 <br>
 
 then choose the Advanced editor (</>) icon.
-![image](https://github.com/wagov/WASOCWorkbooks/assets/43643214/779bb31f-d226-41e8-8933-18ceecd5b9de)
+![image](https://github.com/wagov/WASOCWorkbooks/assets/43643214/5a800d21-e0eb-438c-abc5-ab5d10d0a3a9)
 
 ## Step-3: Copy / Paste / Apply
 Copy the Workbook code from the GitHub repo raw,
@@ -32,18 +32,18 @@ Copy the Workbook code from the GitHub repo raw,
 <br>
 
 Once the code has been copied, replace ALL the sample code in the _Gallery Template_ space with the code you copied from the GitHub repo, then, click the **_Apply_** button.
-![image](https://github.com/wagov/WASOCWorkbooks/assets/43643214/74401503-8cc6-4f41-ab82-f751dea34f9d)
+![image](https://github.com/wagov/WASOCWorkbooks/assets/43643214/bbb11b65-c977-4f46-afba-7d5f55187b3d)
 
 
 ## Step-4: Name it and Save it
 When you applied the code change, the new Workbook will display. Finish up by click the Save (diskette) icon, give the Workbook a unique name.
 
-![image](https://github.com/wagov/WASOCWorkbooks/assets/43643214/33df471a-6caf-4123-85be-44a22018316b)
+![image](https://github.com/wagov/WASOCWorkbooks/assets/43643214/4f21bd14-cd84-4c90-994e-62ffadc70555)
 
 <br>
 
 Note: the **Subscription** and **Resource group** must be the same with your Microsoft Sentinel instance location, to be accessible from Workbooks Gallery inside Sentinel.
 
-![image](https://github.com/wagov/WASOCWorkbooks/assets/43643214/8d27858d-c819-4ce9-8495-f3cc660fd10e)
+![image](https://github.com/wagov/WASOCWorkbooks/assets/43643214/2c16665d-792a-47ed-82b3-9c0157f20217)
 
 Click the **_Apply_** button, the workbook has now been deployed
