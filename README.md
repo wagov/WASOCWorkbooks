@@ -42,6 +42,8 @@ When you applied the code change, the new Workbook will display. Finish up by cl
 
 <br>
 
-Click the **_Apply_** button, the workbook has now been deployed
+Note: the **Subscription** and **Resource group** must be the same as Microsoft Sentinel, to be accessible from Workbooks Gallery inside Sentinel.
+
 ![image](https://github.com/wagov/WASOCWorkbooks/assets/43643214/8d27858d-c819-4ce9-8495-f3cc660fd10e)
 
+Click the **_Apply_** button, the workbook has now been deployed
