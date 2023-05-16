@@ -12,7 +12,7 @@ We use **WASOC - Threat Hunting - Rapid IoC Search.json** as example.
 
 ## Step-2: Navigate to Azure Sentinel | Workbooks
 
-Navigate to your Microsoft Sentinel console and choose the "_Add workbook_" 
+Navigate to your Microsoft Sentinel console, select **Workbooks** in the side blade, and choose the "_Add workbook_" 
 ![image](https://github.com/wagov/WASOCWorkbooks/assets/43643214/6a67c229-4108-40dc-b712-926f98031e3e)
 
 <br>
