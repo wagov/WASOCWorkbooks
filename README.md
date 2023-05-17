@@ -42,7 +42,7 @@ When you applied the code change, the new Workbook will display. Finish up by cl
 
 <br>
 
-Note: the **Subscription** and **Resource group** must be the same with your Microsoft Sentinel instance location, to be accessible from Workbooks Gallery inside Sentinel.
+Note: the **Subscription** and **Resource group** must be the **same** with your Microsoft Sentinel instance **location**, to be accessible from Workbooks Gallery inside Sentinel.
 
 ![image](https://github.com/wagov/WASOCWorkbooks/assets/43643214/2c16665d-792a-47ed-82b3-9c0157f20217)
 
