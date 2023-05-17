@@ -15,12 +15,19 @@
             "name": "Subscription",
             "type": 6,
             "isRequired": true,
+            "query": "Resources\r\n| summarize Count = count() by subscriptionId\r\n| order by Count desc\r\n| extend Rank = row_number()\r\n| project value = subscriptionId, label = subscriptionId, selected = Rank == 1",
+            "crossComponentResources": [
+              "value::selected"
+            ],
             "typeSettings": {
-              "additionalResourceOptions": [],
-              "includeAll": true,
+              "additionalResourceOptions": [
+                "value::1"
+              ],
               "showDefault": false
             },
-            "value": null
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources",
+            "value": "/subscriptions/4e889a89-4df6-4427-9e88-51aed0faa679"
           },
           {
             "id": "41102d0e-96f6-42aa-9496-d43573a7537a",
@@ -40,7 +47,8 @@
               "durationMs": 86400000
             },
             "queryType": 1,
-            "resourceType": "microsoft.operationalinsights/workspaces"
+            "resourceType": "microsoft.resourcegraph/resources",
+            "value": "/subscriptions/4e889a89-4df6-4427-9e88-51aed0faa679/resourcegroups/dev_test_sentinel_parent/providers/Microsoft.OperationalInsights/workspaces/Parent-Sentinel"
           },
           {
             "id": "79b21540-298d-4224-8349-fb32b4cb02e9",
@@ -98,7 +106,7 @@
         ],
         "style": "pills",
         "queryType": 1,
-        "resourceType": "microsoft.operationalinsights/workspaces"
+        "resourceType": "microsoft.resourcegraph/resources"
       },
       "name": "parameters - 1"
     },
