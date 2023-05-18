@@ -1,5 +1,5 @@
-# WASOC Workbooks - How to deploy the workbooks into you Azure Sentinel
-Deploying code from WASOC GitHub repository to your Azure Sentinel instance is very similar to copy/paste operation. This guidance is specific for **Workbook**
+# WASOC Workbooks - How to deploy the workbooks into an Azure Sentinel Workspace
+This process is for the *manual* deployment of **Azure Workbooks** to your Azure Sentinel workspace. This will allow for workbooks to appear in the workbook gallery.
 
 
 ## Step-1: Copy the code from WASOCWorkbooks
