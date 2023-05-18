@@ -1,5 +1,5 @@
 # WASOC Workbooks - How to deploy the workbooks into an Azure Sentinel Workspace
-This process is for the *manual* deployment of **Azure Workbooks** to an Azure Sentinel workspace. This will allow for workbooks to appear in the workbook gallery.
+This process is for the _manual_ deployment of **Azure Workbooks** to an Azure Sentinel workspace. This will allow for workbooks to appear in the workbook gallery.
 
 
 ## Step-1: Copy the code from WASOCWorkbooks
@@ -22,11 +22,11 @@ Once the sample workbook displays, select _Edit_ mode,
 
 <br>
 
-then choose the Advanced editor (</>) icon.
+Then choose the Advanced editor (</>) icon.
 ![image](https://github.com/wagov/WASOCWorkbooks/assets/43643214/5a800d21-e0eb-438c-abc5-ab5d10d0a3a9)
 
 ## Step-3: Copy / Paste / Apply
-Copy the Workbook code from the GitHub repo raw,
+Copy the Workbook code from the GitHub repository as raw format,
 ![image](https://github.com/wagov/WASOCWorkbooks/assets/43643214/f5c58b76-df26-4b5f-acc7-7a3caa85a750)
 
 <br>
@@ -36,13 +36,13 @@ Once the code has been copied, replace ALL the sample code in the _Gallery Templ
 
 
 ## Step-4: Name it and Save it
-When you applied the code change, the new Workbook will display. Finish up by click the Save (diskette) icon, give the Workbook a unique name.
+When you applied the code change, the new Workbook will display. Finialise changes by clicking the Save (diskette) icon, and give the Workbook a unique name.
 
 ![image](https://github.com/wagov/WASOCWorkbooks/assets/43643214/4f21bd14-cd84-4c90-994e-62ffadc70555)
 
 <br>
 
-Note: the **Subscription** and **Resource group** must be the **same** with your Microsoft Sentinel instance **location**, to be accessible from Workbooks Gallery inside Sentinel.
+Note: the **Subscription** and **Resource group** must be the **same** with your Microsoft Sentinel instance **location**, to be accessible from Workbooks Gallery in Sentinel.
 
 ![image](https://github.com/wagov/WASOCWorkbooks/assets/43643214/2c16665d-792a-47ed-82b3-9c0157f20217)
 
