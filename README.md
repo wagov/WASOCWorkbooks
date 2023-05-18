@@ -1,5 +1,5 @@
 # WASOC Workbooks - How to deploy the workbooks into an Azure Sentinel Workspace
-This process is for the *manual* deployment of **Azure Workbooks** to your Azure Sentinel workspace. This will allow for workbooks to appear in the workbook gallery.
+This process is for the *manual* deployment of **Azure Workbooks** to an Azure Sentinel workspace. This will allow for workbooks to appear in the workbook gallery.
 
 
 ## Step-1: Copy the code from WASOCWorkbooks
