@@ -6,7 +6,7 @@
       "content": {
         "version": "KqlParameterItem/1.0",
         "crossComponentResources": [
-          "{Subscription}"
+          "value::selected"
         ],
         "parameters": [
           {
@@ -48,7 +48,7 @@
             },
             "queryType": 1,
             "resourceType": "microsoft.resourcegraph/resources",
-            "value": "/subscriptions/4e889a89-4df6-4427-9e88-51aed0faa679/resourcegroups/dev_test_sentinel_parent/providers/Microsoft.OperationalInsights/workspaces/Parent-Sentinel"
+            "value": null
           },
           {
             "id": "79b21540-298d-4224-8349-fb32b4cb02e9",
@@ -3344,7 +3344,7 @@
                   "timeContext": {
                     "durationMs": 86400000
                   },
-                  "value": "(\"sample@google.com.au\")"
+                  "value": "(\"sample@google.com\")"
                 }
               ],
               "style": "pills",
@@ -3364,7 +3364,7 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": "EmailEvents\n|where SenderMailFromAddress has_any {EMAIL_IOC}\n| where EmailDirection == \"Inbound\"\n| summarize count() by DeliveryAction",
+              "query": "EmailEvents\n| where SenderMailFromAddress has_any {EMAIL_IOC} or SenderFromAddress has_any {EMAIL_IOC} //Must use both P1 P2 column names\n| where EmailDirection == \"Inbound\"\n| summarize count() by DeliveryAction",
               "size": 0,
               "title": "Email Inbound Deliverability in the {TimeRange:label}",
               "timeContextFromParameter": "TimeRange",
@@ -3403,7 +3403,7 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": "EmailEvents\n|where SenderMailFromAddress has_any {EMAIL_IOC}\n| where EmailDirection == \"Inbound\"\n| where DeliveryAction == \"Delivered\"\n| summarize count() by DeliveryLocation",
+              "query": "EmailEvents\n| where SenderMailFromAddress has_any {EMAIL_IOC} or SenderFromAddress has_any {EMAIL_IOC} //Must use both P1 P2 column names\n| where EmailDirection == \"Inbound\"\n| where DeliveryAction == \"Delivered\"\n| summarize count() by DeliveryLocation",
               "size": 0,
               "title": "Email inbound deliverability by Location in the {TimeRange:label}",
               "timeContextFromParameter": "TimeRange",
@@ -3433,7 +3433,7 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": "EmailEvents\n| where TimeGenerated {TimeRange:value}\n|where SenderMailFromAddress has_any {EMAIL_IOC}\n| where EmailDirection == \"Inbound\"\n| where DeliveryAction == \"Delivered\"\n| project NetworkMessageId, DeliveryAction, DeliveryLocation, SenderFromAddress, SenderMailFromAddress, RecipientEmailAddress, Subject, SenderIPv4, EmailDirection, TenantId\n| join kind=leftouter \n( \nEmailPostDeliveryEvents\n| where TimeGenerated {TimeRange:value}\n| summarize arg_max(TimeGenerated,*) by NetworkMessageId\n| extend \n    DeliveryLocation_Post = DeliveryLocation, //Differentiate with original location\n    TenantId_Post = TenantId //Differentiate with original location\n) on NetworkMessageId, RecipientEmailAddress\n| extend \n    Action = iff(isempty(Action), \"No Action\", Action),\n    ActionResult = iff(isempty(ActionResult), \"No Result\",ActionResult),\n    ActionTrigger = iff(isempty(ActionTrigger), \"No Trigger\",ActionTrigger),\n    ActionType = iff(isempty(ActionType), \"No Action\",ActionType),\n    final_DeliveryLocation = iff(isempty(DeliveryLocation_Post), \n                                iff(ActionType contains \"ZAP\", ActionType, DeliveryLocation),\n                                    DeliveryLocation_Post) //Find a final location of the email\n| evaluate pivot(final_DeliveryLocation,count(RecipientEmailAddress),DeliveryLocation)",
+              "query": "EmailEvents\n| where TimeGenerated {TimeRange:value}\n| where SenderMailFromAddress has_any {EMAIL_IOC} or SenderFromAddress has_any {EMAIL_IOC} //Must use both P1 P2 column names\n| where EmailDirection == \"Inbound\"\n| where DeliveryAction == \"Delivered\"\n| project NetworkMessageId, DeliveryAction, DeliveryLocation, SenderFromAddress, SenderMailFromAddress, RecipientEmailAddress, Subject, SenderIPv4, EmailDirection, TenantId\n| join kind=leftouter \n( \nEmailPostDeliveryEvents\n| where TimeGenerated {TimeRange:value}\n| summarize arg_max(TimeGenerated,*) by NetworkMessageId\n| extend \n    DeliveryLocation_Post = DeliveryLocation, //Differentiate with original location\n    TenantId_Post = TenantId //Differentiate with original location\n) on NetworkMessageId, RecipientEmailAddress\n| extend \n    Action = iff(isempty(Action), \"No Action\", Action),\n    ActionResult = iff(isempty(ActionResult), \"No Result\",ActionResult),\n    ActionTrigger = iff(isempty(ActionTrigger), \"No Trigger\",ActionTrigger),\n    ActionType = iff(isempty(ActionType), \"No Action\",ActionType),\n    final_DeliveryLocation = iff(isempty(DeliveryLocation_Post), \n                                iff(ActionType contains \"ZAP\", ActionType, DeliveryLocation),\n                                    DeliveryLocation_Post) //Find a final location of the email\n| evaluate pivot(final_DeliveryLocation,count(RecipientEmailAddress),DeliveryLocation)",
               "size": 0,
               "title": "Original Email Location vs. Final Email Location in the {TimeRange:label}",
               "timeContextFromParameter": "TimeRange",
@@ -3544,7 +3544,7 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": "EmailEvents\n| where TimeGenerated {TimeRange:value}\n|where SenderMailFromAddress has_any {EMAIL_IOC}\n| where EmailDirection == \"Inbound\"\n| where DeliveryAction == \"Delivered\"\n| project NetworkMessageId, DeliveryAction, DeliveryLocation, SenderFromAddress, SenderMailFromAddress, RecipientEmailAddress, Subject, SenderIPv4, EmailDirection, TenantId\n| join kind=leftouter \n( \nEmailPostDeliveryEvents\n| where TimeGenerated {TimeRange:value}\n| summarize arg_max(TimeGenerated,*) by NetworkMessageId\n| extend \n    DeliveryLocation_Post = DeliveryLocation, //Differentiate with original location\n    TenantId_Post = TenantId //Differentiate with original location\n) on NetworkMessageId, RecipientEmailAddress\n| extend \n    Action = iff(isempty(Action), \"No Action\", Action),\n    ActionResult = iff(isempty(ActionResult), \"No Result\",ActionResult),\n    ActionTrigger = iff(isempty(ActionTrigger), \"No Trigger\",ActionTrigger),\n    ActionType = iff(isempty(ActionType), \"No Action\",ActionType),\n    final_DeliveryLocation = iff(isempty(DeliveryLocation_Post), \n                                iff(ActionType contains \"ZAP\", ActionType, DeliveryLocation),\n                                    DeliveryLocation_Post) //Find a final location of the email\n| evaluate pivot(final_DeliveryLocation,count(RecipientEmailAddress),TenantId)",
+              "query": "EmailEvents\n| where TimeGenerated {TimeRange:value}\n| where SenderMailFromAddress has_any {EMAIL_IOC} or SenderFromAddress has_any {EMAIL_IOC} //Must use both P1 P2 column names\n| where EmailDirection == \"Inbound\"\n| where DeliveryAction == \"Delivered\"\n| project NetworkMessageId, DeliveryAction, DeliveryLocation, SenderFromAddress, SenderMailFromAddress, RecipientEmailAddress, Subject, SenderIPv4, EmailDirection, TenantId\n| join kind=leftouter \n( \nEmailPostDeliveryEvents\n| where TimeGenerated {TimeRange:value}\n| summarize arg_max(TimeGenerated,*) by NetworkMessageId\n| extend \n    DeliveryLocation_Post = DeliveryLocation, //Differentiate with original location\n    TenantId_Post = TenantId //Differentiate with original location\n) on NetworkMessageId, RecipientEmailAddress\n| extend \n    Action = iff(isempty(Action), \"No Action\", Action),\n    ActionResult = iff(isempty(ActionResult), \"No Result\",ActionResult),\n    ActionTrigger = iff(isempty(ActionTrigger), \"No Trigger\",ActionTrigger),\n    ActionType = iff(isempty(ActionType), \"No Action\",ActionType),\n    final_DeliveryLocation = iff(isempty(DeliveryLocation_Post), \n                                iff(ActionType contains \"ZAP\", ActionType, DeliveryLocation),\n                                    DeliveryLocation_Post) //Find a final location of the email\n| evaluate pivot(final_DeliveryLocation,count(RecipientEmailAddress),TenantId)",
               "size": 0,
               "title": "Email final location by Agency in the {TimeRange:label}",
               "timeContextFromParameter": "TimeRange",
@@ -3718,7 +3718,7 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": "let time_step = {TimeRange:grain};\nEmailEvents\n| where SenderMailFromAddress has_any {EMAIL_IOC}\n| extend IOC = SenderMailFromAddress\n| make-series Email_Trend = count() default=0 on TimeGenerated in range({TimeRange:start}+time_step,{TimeRange:end}-time_step,time_step) by IOC",
+              "query": "let time_step = {TimeRange:grain};\nEmailEvents\n| where SenderMailFromAddress has_any {EMAIL_IOC} or SenderFromAddress has_any {EMAIL_IOC} //Must use both P1 P2 column names\n| extend IOC = SenderMailFromAddress\n| make-series Email_Trend = count() default=0 on TimeGenerated in range({TimeRange:start}+time_step,{TimeRange:end}-time_step,time_step) by IOC",
               "size": 1,
               "title": "EmailEvents - SenderMailFromAddress - Cross-sector overview",
               "timeContextFromParameter": "TimeRange",
@@ -3735,7 +3735,7 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": "EmailEvents\n| where TimeGenerated {TimeRange:value}\n| where SenderMailFromAddress has_any {EMAIL_IOC}\n| join kind=leftouter \n( \nEmailPostDeliveryEvents\n| where TimeGenerated {TimeRange:value}\n| summarize arg_max(TimeGenerated,*) by NetworkMessageId\n| extend \n    DeliveryLocation_Post = DeliveryLocation, //Differentiate with original location\n    TenantId_Post = TenantId\n) on NetworkMessageId, RecipientEmailAddress\n| extend \n    Action = iff(isempty(Action), \"No Action\", Action),\n    ActionResult = iff(isempty(ActionResult), \"No Result\",ActionResult),\n    ActionTrigger = iff(isempty(ActionTrigger), \"No Trigger\",ActionTrigger),\n    ActionType = iff(isempty(ActionType), \"No Action\",ActionType),\n    final_DeliveryLocation = iff(isempty(DeliveryLocation_Post), DeliveryLocation,DeliveryLocation_Post) //Find a final location of the email\n| summarize IOC=make_set(SenderMailFromAddress), count_=count(SenderMailFromAddress) ,Recipient=make_set(RecipientEmailAddress), EmailSubject=make_set(Subject), DeliveryAction=make_set(DeliveryAction) ,FirstEvent= min(TimeGenerated), LastEvent=max(TimeGenerated) , final_DeliveryLocation=make_set(final_DeliveryLocation)  by TenantId\n| extend IOC = tostring(strcat_array(IOC,\", \")), Recipient = tostring(strcat_array(Recipient,\", \")), EmailSubject = tostring(strcat_array(EmailSubject,\", \")), DeliveryAction = tostring(strcat_array(DeliveryAction,\", \")), final_DeliveryLocation = tostring(strcat_array(final_DeliveryLocation,\", \"))\n| project FirstEvent, LastEvent, IOC, count_, Recipient, EmailSubject, DeliveryAction, final_DeliveryLocation\n| sort by count_ desc",
+              "query": "EmailEvents\n| where TimeGenerated {TimeRange:value}\n| where SenderMailFromAddress has_any {EMAIL_IOC} or SenderFromAddress has_any {EMAIL_IOC} //Must use both P1 P2 column names\n| join kind=leftouter \n( \nEmailPostDeliveryEvents\n| where TimeGenerated {TimeRange:value}\n| summarize arg_max(TimeGenerated,*) by NetworkMessageId\n| extend \n    DeliveryLocation_Post = DeliveryLocation, //Differentiate with original location\n    TenantId_Post = TenantId\n) on NetworkMessageId, RecipientEmailAddress\n| extend \n    Action = iff(isempty(Action), \"No Action\", Action),\n    ActionResult = iff(isempty(ActionResult), \"No Result\",ActionResult),\n    ActionTrigger = iff(isempty(ActionTrigger), \"No Trigger\",ActionTrigger),\n    ActionType = iff(isempty(ActionType), \"No Action\",ActionType),\n    final_DeliveryLocation = iff(isempty(DeliveryLocation_Post), DeliveryLocation,DeliveryLocation_Post) //Find a final location of the email\n| summarize IOC=make_set(SenderMailFromAddress), count_=count(SenderMailFromAddress) ,Recipient=make_set(RecipientEmailAddress), EmailSubject=make_set(Subject), DeliveryAction=make_set(DeliveryAction) ,FirstEvent= min(TimeGenerated), LastEvent=max(TimeGenerated) , final_DeliveryLocation=make_set(final_DeliveryLocation)  by TenantId\n| extend IOC = tostring(strcat_array(IOC,\", \")), Recipient = tostring(strcat_array(Recipient,\", \")), EmailSubject = tostring(strcat_array(EmailSubject,\", \")), DeliveryAction = tostring(strcat_array(DeliveryAction,\", \")), final_DeliveryLocation = tostring(strcat_array(final_DeliveryLocation,\", \"))\n| project FirstEvent, LastEvent, IOC, count_, Recipient, EmailSubject, DeliveryAction, final_DeliveryLocation\n| sort by count_ desc",
               "size": 0,
               "title": "EmailEvents - SenderMailFromAddress + EmailPostDeliveryAction",
               "showExportToExcel": true,
@@ -3796,7 +3796,7 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": "EmailEvents\n| where TimeGenerated {TimeRange:value}\n| where SenderMailFromAddress has_any {EMAIL_IOC}\n| project TimeGenerated, DeliveryAction, DeliveryLocation, SenderMailFromAddress, RecipientEmailAddress, Subject, NetworkMessageId\n| join kind=inner \n(\nUrlClickEvents\n| where TimeGenerated {TimeRange:value}\n) on NetworkMessageId\n| summarize IOC=make_set(SenderMailFromAddress) ,count_=count(SenderMailFromAddress), Recipient=make_set(RecipientEmailAddress), EmailSubject=make_set(Subject), DeliveryAction=make_set(DeliveryAction), DeliveryLocation=make_set(DeliveryLocation) , UserClick = make_set(AccountUpn) ,FirstEvent= min(TimeGenerated), LastEvent=max(TimeGenerated), Url=make_set(Url) by TenantId\n| extend IOC = tostring(strcat_array(IOC,\", \")), Recipient = tostring(strcat_array(Recipient,\", \")), EmailSubject = tostring(strcat_array(EmailSubject,\", \")), DeliveryAction = tostring(strcat_array(DeliveryAction,\", \")), DeliveryLocation = tostring(strcat_array(DeliveryLocation,\", \")), Url = tostring(strcat_array(Url,\", \")), UserClick = tostring(strcat_array(UserClick,\", \"))\n|project FirstEvent, LastEvent, IOC, count_, Recipient, UserClick, EmailSubject, DeliveryAction, DeliveryLocation, Url\n|sort by count_ desc\n",
+              "query": "EmailEvents\n| where TimeGenerated {TimeRange:value}\n| where SenderMailFromAddress has_any {EMAIL_IOC} or SenderFromAddress has_any {EMAIL_IOC} //Must use both P1 P2 column names\n| project TimeGenerated, DeliveryAction, DeliveryLocation, SenderMailFromAddress, RecipientEmailAddress, Subject, NetworkMessageId\n| join kind=inner \n(\nUrlClickEvents\n| where TimeGenerated {TimeRange:value}\n) on NetworkMessageId\n| summarize IOC=make_set(SenderMailFromAddress) ,count_=count(SenderMailFromAddress), Recipient=make_set(RecipientEmailAddress), EmailSubject=make_set(Subject), DeliveryAction=make_set(DeliveryAction), DeliveryLocation=make_set(DeliveryLocation) , UserClick = make_set(AccountUpn) ,FirstEvent= min(TimeGenerated), LastEvent=max(TimeGenerated), Url=make_set(Url) by TenantId\n| extend IOC = tostring(strcat_array(IOC,\", \")), Recipient = tostring(strcat_array(Recipient,\", \")), EmailSubject = tostring(strcat_array(EmailSubject,\", \")), DeliveryAction = tostring(strcat_array(DeliveryAction,\", \")), DeliveryLocation = tostring(strcat_array(DeliveryLocation,\", \")), Url = tostring(strcat_array(Url,\", \")), UserClick = tostring(strcat_array(UserClick,\", \"))\n|project FirstEvent, LastEvent, IOC, count_, Recipient, UserClick, EmailSubject, DeliveryAction, DeliveryLocation, Url\n|sort by count_ desc\n",
               "size": 0,
               "title": "UrlClickEvents - Click Events from email sent by Sender",
               "timeContextFromParameter": "TimeRange",
@@ -3839,7 +3839,7 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": "let time_step = {TimeRange:grain};\nEmailEvents\n| where RecipientEmailAddress has_any {EMAIL_IOC}\n| extend IOC = RecipientEmailAddress\n| make-series Email_Trend = count() default=0 on TimeGenerated in range({TimeRange:start}+time_step,{TimeRange:end}-time_step,time_step) by IOC",
+              "query": "let time_step = {TimeRange:grain};\nEmailEvents\n| where SenderMailFromAddress has_any {EMAIL_IOC} or SenderFromAddress has_any {EMAIL_IOC} //Must use both P1 P2 column names\n| extend IOC = RecipientEmailAddress\n| make-series Email_Trend = count() default=0 on TimeGenerated in range({TimeRange:start}+time_step,{TimeRange:end}-time_step,time_step) by IOC",
               "size": 1,
               "title": "EmailEvents - RecipientEmailAddress - Outbound email interaction with IOCS - Cross-sector overview",
               "timeContextFromParameter": "TimeRange",
